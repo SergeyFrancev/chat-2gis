@@ -1,5 +1,5 @@
 #Chat 2Gis
-*Тэстовая работа на должность Web-developer 2Gis*
+*Тестовая работа на должность Web-developer 2Gis*
 -Node.js server
 -WebSocket
 -Mocha test
