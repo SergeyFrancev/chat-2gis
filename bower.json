@@ -1,0 +1,22 @@
+{
+  "name": "chat-2gis",
+  "version": "1.0.0",
+  "homepage": "https://github.com/SergeyFrancev/chat-2gis",
+  "authors": [
+    "hector <drshteyn@gmail.vom>"
+  ],
+  "description": "Test task for 2Gis",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "js/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

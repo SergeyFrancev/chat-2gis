@@ -1,0 +1,41 @@
+{
+  "_nodeVersion": "0.12.7",
+  "_npmVersion": "3.3.4",
+  "name": "chat-2gis",
+  "version": "1.0.0",
+  "description": "Test task for 2GIS. For the post JS-Developer",
+  "main": "server-run.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeyFrancev/chat-2gis.git"
+  },
+  "keywords": [
+    "chat",
+    "nodejs",
+    "js",
+    "bootsrap",
+    "web-socket",
+    "mocha"
+  ],
+  "author": "Sergey Frantsev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SergeyFrancev/chat-2gis/issues"
+  },
+  "homepage": "https://github.com/SergeyFrancev/chat-2gis#readme",
+  "dependencies": {
+    "bower": "^1.5.3",
+    "chai": "^3.3.0",
+    "gulp": "^3.9.0",
+    "mocha": "^2.3.3",
+    "node-static": "^0.7.7",
+    "ws": "^0.8.0"
+  },
+  "devDependencies": {
+    "gulp-mocha": "^2.1.3",
+    "gulp-mocha-phantomjs": "^0.10.1"
+  }
+}

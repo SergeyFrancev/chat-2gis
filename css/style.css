@@ -1,0 +1,8 @@
+#messages-container, #user-container {
+    height: 300px;
+    font: 11pt 'Palatino Linotype';
+    overflow: auto;
+}
+.container{
+    margin-top: 50px;
+}

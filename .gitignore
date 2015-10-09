@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Node template
+# Logs
+logs
+
+# Dependency directory
+# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
+node_modules
+
+# JetBrains WebStorm IDE files
+.idea
+
+# Lib derictory
+js/lib
