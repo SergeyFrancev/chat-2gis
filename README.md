@@ -1,12 +1,12 @@
 #Chat 2Gis
 *Тестовая работа на должность Web-developer 2Gis*
--Node.js server
--WebSocket
--Mocha test
+*-Node.js server*
+*-WebSocket*
+*-Mocha test*
 
 ## Requirements
-	- nodejs v0.12.7
-	- npm v3.3.4
+	- node -v v0.12.7
+	- npm -v 3.3.4
 	
 ## Install
 	```
@@ -21,5 +21,5 @@
 	Open in your browser http://127.0.0.1:8080
 ## Test
 	```
-    $ gulp test
+    $ npm test
     ```

@@ -9,6 +9,9 @@ node_modules
 
 # JetBrains WebStorm IDE files
 .idea
+# Vagrant files
+.vagrant
+Vagrantfile
 
 # Lib derictory
 js/lib
