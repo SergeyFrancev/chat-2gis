@@ -7,11 +7,12 @@
 ## Requirements
 	- node -v v0.12.7
 	- npm -v 3.3.4
+	- git
 	
 ## Install
 	```
     $ npm install
-    $ bower install
+    $ node_modules/bower/bin/bower install
     ```
 
 ## Run
