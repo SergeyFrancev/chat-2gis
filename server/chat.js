@@ -20,7 +20,7 @@ var sendChatMessage = function(message){
 };
 
 /**
- * Send message all online user
+ * Send message all online users
  * @param data
  */
 var sendBroadcast = function(data){
@@ -42,26 +42,20 @@ var addUser = function(user){
 };
 
 var sendUpdateUserList = function(){
-	getUserList(function(userList){
-		sendBroadcast({
-			event: 'update-user-list',
-			users: userList
-		});
+	sendBroadcast({
+		event: 'update-user-list',
+		users: getUserList()
 	});
 };
 
-/**
- * Call function argument listUser
- * @param callback
- */
-var getUserList = function(callback){
+var getUserList = function(){
 	var listUser = [];
 	for(var i = 0; i < users.length; i++)
 		listUser.push({username: users[i].name});
-	callback(listUser);
+	return listUser;
 };
 
-var leaveUser = function(user){
+var disconnectUser = function(user){
 	var index = null;
 	for(var i = 0; i < users.length; i++){
 		if(users[i].name == user.name){
@@ -70,6 +64,7 @@ var leaveUser = function(user){
 		}
 	}
 	var message = MessageFactory.createSystemMessage(users[index].name + ' покинул чат');
+	//Remove user from users list
 	users.splice(index, 1);
 	sendChatMessage(message);
 	sendUpdateUserList();
@@ -82,12 +77,11 @@ var leaveUser = function(user){
  */
 var validateUserName = function(username){
 	if((typeof username === 'string') && /^[a-z0-9_]{3,24}$/gi.test(username)){
-		//Is valid user name
+		//Check user name exist
 		for(var i = 0; i < users.length; i++){
 			if(users[i].name == username)
 				return 'User name already exist';
 		}
-		//Is username no exist
 		return true;
 	}
 	else
@@ -143,8 +137,7 @@ exports.connectUser = function(ws){
 		case 'sendMessage': // On user send message
 			if(user === false || (data.message + '').length < 1)
 				return;
-			var mes = data.message.replace(/[\r\n]/g, "</br>");
-			mes = MessageFactory.createMessage(user.name, mes);
+			var mes = MessageFactory.createMessage(user.name, data.message);
 			sendChatMessage(mes);
 			break;
 		}
@@ -153,6 +146,6 @@ exports.connectUser = function(ws){
 	ws.on('close', function(){
 		if(user === false)
 			return;
-		leaveUser(user);
+		disconnectUser(user);
 	});
 };

@@ -1,95 +1,98 @@
 /**
  * Created by hector on 08.10.15.
  */
-var chat = chat || {};
-chat.client = (function(){
-	'use strict';
-	var socket = false,
-		eventsList = {};
+'use strict';
+var ChatApp = ChatApp || {};
+(function(){
+	var ChatClient = function(){
+		ChatApp.eventEmitter.apply(this);
+		this._socket = false;
+		this._ip = null;
+		this._port = null;
+	};
+	ChatClient.prototype = Object.create(ChatApp.eventEmitter.prototype);
+	ChatClient.constructor = ChatClient;
 
-	var onMessageSocket = function(event){
-		var data = JSON.parse(event.data);
-		switch (data.event){
-		case 'success-login':
-			fireEvent('startChat', {messages: data.messages});
-			break;
-		case 'error-login':
-			fireEvent('errorLogin', {message: data.error});
-			break;
-		case 'new-message':
-			fireEvent('newMessage', data.message);
-			break;
-		case 'update-user-list':
-			fireEvent('updateUserList', data.users);
-			break;
+	ChatClient.prototype.connect = function(ip, port){
+		if(this._socket){
+			console.error("Chat client already connected");
+			return false;
 		}
+		this._ip = ip || '127.0.0.1';
+		this._port = port || '8888';
+
+		this._socket = new WebSocket("ws://" + this._ip + ":" + this._port);
+		this._socket.onmessage = this.onMessageWS.bind(this);
+		this._socket.onopen = this.onOpenWS.bind(this);
+		this._socket.onclose = this.onCloseWS.bind(this);
+		this._socket.onerror = this.onErrorWS.bind(this);
+		return this;
 	};
 
-	var onOpenSocket = function(){
-	};
-
-	var onCloseSocket = function(){
-		fireEvent('errorConnection', {message: 'Server close socket'});
-		socket = false;
-	};
-
-	var onErrorSocket = function(){
-		fireEvent('errorConnection', {message: 'Server error'});
-		socket = false;
-	};
-
-	var fireEvent = function(){
-		var eventName = arguments[0],
-			args = [], i;
-		if(typeof eventsList[eventName] == 'undefined')
+	ChatClient.prototype.disconnect = function(){
+		if(!this._socket)
 			return;
 
-		for(i=1; i<arguments.length; i++)
-			args.push(arguments[i]);
-
-		for(i=0; i<eventsList[eventName].length; i++)
-			eventsList[eventName][i].apply(this, args);
+		this._socket.close();
+		this._socket = false;
 	};
 
-	var methods = {
-		createChat: function(conf){
-			if(socket !== false)
-				return;
+	ChatClient.prototype.sendJSON = function(data){
+		if(this._socket !== false)
+			this._socket.send(JSON.stringify(data))
+	};
 
-			var ip = conf.ip || '127.0.0.1';
-			var port = conf.port || '8888';
+	ChatClient.prototype.sendMessage = function(message){
+		this.sendJSON({
+			event: 'sendMessage',
+			message: message
+		});
+	};
 
-			socket = new WebSocket("ws://"+ip+":"+port);
-			socket.onmessage = onMessageSocket;
-			socket.onopen = onOpenSocket;
-			socket.onclose = onCloseSocket;
-			socket.onerror = onErrorSocket;
+	ChatClient.prototype.singInUser = function(username){
+		this.sendJSON({
+			event: 'singInUser',
+			username: username
+		});
+	};
 
-			var sendMessage = function(data){
-				if(socket !== false)
-					socket.send(JSON.stringify(data))
-			};
-			return {
-				singInUser: function(username){
-					sendMessage({
-						event: 'singInUser',
-						username: username
-					});
-				},
-				sendMessage: function(message){
-					sendMessage({
-						event: 'sendMessage',
-						message: message
-					});
-				}
-			}
-		},
-		on: function(event, callback){
-			if(typeof eventsList[event] == 'undefined')
-				eventsList[event] = [];
-			eventsList[event].push(callback);
+	ChatClient.prototype.onMessageWS = function(event){
+		var data = JSON.parse(event.data);
+		switch(data.event){
+		case 'success-login':
+			this.fire('startChat', {messages: data.messages});
+			break;
+		case 'error-login':
+			this.fire('errorLogin', {message: data.error});
+			break;
+		case 'new-message':
+			this.fire('newMessage', data.message);
+			break;
+		case 'update-user-list':
+			this.fire('updateUserList', data.users);
+			break;
 		}
 	};
+	ChatClient.prototype.onOpenWS = function(){};
+	ChatClient.prototype.onCloseWS = function(){
+		this._socket = false;
+		this.fire('errorConnection', {message: 'Server close socket'});
+	};
+	ChatClient.prototype.onErrorWS = function(){
+		this._socket = false;
+		this.fire('errorConnection', {message: 'Server error'});
+	};
 
-	return methods;
+	Object.defineProperty(ChatClient.prototype, 'port', {
+		set: function(value){
+			this.disconnect();
+			this._port = value;
+			this.connect(this._ip, this._port);
+		},
+		get: function(){
+			return this._port;
+		}
+	});
+
+	ChatApp.chatClient = ChatClient;
 })();

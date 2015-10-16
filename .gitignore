@@ -15,3 +15,7 @@ Vagrantfile
 
 # Lib derictory
 js/lib
+
+# Build files
+#build/css/*
+#build/js/*

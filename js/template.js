@@ -1,10 +1,10 @@
 /**
  * Created by hector on 08.10.15.
  */
-var chat = chat || {};
-chat.template = (function(){
-	'use strict';
+'use strict';
 
+var ChatApp = ChatApp || {};
+ChatApp.template = (function(){
 	var templates = {
 		userMessage: '<p style="display: flex">[{time}] - <b>{fromUser}:</b> {message}</p>',
 		systemMessage: '<div class="text-center"><em>{message}</em></div>',

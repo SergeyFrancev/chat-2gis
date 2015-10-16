@@ -2,7 +2,7 @@
  * Created by hector on 08.10.15.
  */
 describe('Template', function(){
-	var template = chat.template;
+	var template = ChatApp.template;
 
 	describe('format time', function(){
 		it('return not empty string', function(){

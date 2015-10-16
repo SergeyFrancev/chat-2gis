@@ -1,5 +1,5 @@
 #Chat 2Gis
-*Тестовая работа на должность Web-developer 2Gis*
+*Простой чат*
 *-Node.js server*
 *-WebSocket*
 *-Mocha test*
@@ -13,6 +13,7 @@
 	```
     $ npm install
     $ node_modules/bower/bin/bower install
+    $ gulp build
     ```
 
 ## Run
@@ -20,6 +21,7 @@
     $ node server-run.js
     ```
 	Open in your browser http://127.0.0.1:8080
+	
 ## Test
 	```
     $ npm test

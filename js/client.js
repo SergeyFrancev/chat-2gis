@@ -1,73 +1,90 @@
-window.onload = function() {
+window.onload = function(){
 	'use strict';
-	var singInCont = document.getElementById('singin-container'),
-		chatCont = document.getElementById('chat-container'),
-		messageContainer = document.getElementById('messages-container'),
+	var messageContainer = document.getElementById('messages-container'),
 		userContainer = document.getElementById('user-container'),
 		fieldMessage = document.getElementById('input'),
-		sendBtn = document.getElementById('send');
+		sendBtn = document.getElementById('send'),
+		userName = document.getElementById('username'),
+		isAuth = false;
 
-	var Chat = chat.client;
+	var Chat = new ChatApp.chatClient();
 	Chat.on('startChat', function(data){
-		var messageList = data.messages;
+		isAuth = true;
+		var messageList = data.messages,
+			chatCont = document.getElementById('chat-container'),
+			singInCont = document.getElementById('singin-container');
+
 		chatCont.classList.remove("hide");
 		singInCont.classList.add("hide");
-		while(messageList.length> 0)
+
+		//Render messages
+		while(messageList.length > 0)
 			renderMessage(messageList.shift());
+
+		//Hide error login message
 		showErrorLogin(false);
+		userName.value = '';
 	});
 	Chat.on('newMessage', function(data){
 		renderMessage(data);
 	});
 	Chat.on('updateUserList', function(userList){
 		userContainer.innerHTML = '';
-		for(var i =0; i<userList.length; i++)
-			userContainer.innerHTML = userContainer.innerHTML + chat.template.getHtml('user', userList[i]);
+		for(var i = 0; i < userList.length; i++)
+			userContainer.innerHTML = userContainer.innerHTML + ChatApp.template.getHtml('user', userList[i]);
 	});
+
 	Chat.on('errorLogin', function(error){
 		showErrorLogin(error.message);
 	});
+
+	//Call after socket close connection
 	Chat.on('errorConnection', function(error){
-		renderMessage(error);
-		fieldMessage.disabled = true;
-		sendBtn.disabled = true;
-	});
-	var ChatClient = Chat.createChat({
-		ip: '127.0.0.1',
-		port: '8888'
+		if(isAuth)
+		{
+			renderMessage(error);
+			fieldMessage.disabled = true;
+			sendBtn.disabled = true;
+		}
+		else
+			showErrorLogin(error.message);
 	});
 
 	var showErrorLogin = function(errorMessage){
-		var cont = document.getElementById('error-container');
+		var errCont = document.getElementById('error-container');
 		if(errorMessage)
-			cont.innerHTML = chat.template.getHtml('errorLogin', {message: errorMessage});
+			errCont.innerHTML = ChatApp.template.getHtml('errorLogin', {message: errorMessage});
 		else
-			cont.innerHTML = '';
+			errCont.innerHTML = '';
 	};
 
+	//Render message in chat window
 	var renderMessage = function(data){
 		var html = null;
 		if(data.fromUser === null)
-			html = chat.template.getHtml('systemMessage', data);
+			html = ChatApp.template.getHtml('systemMessage', data);
 		else if(data.fromUser){
-			data.time = chat.template.formatTime(data.createTime);
-			html = chat.template.getHtml('userMessage', data);
+			data.time = ChatApp.template.formatTime(data.createTime);
+			html = ChatApp.template.getHtml('userMessage', data);
 		}
 		else{
-			html = chat.template.getHtml('errorMessage', data);
+			html = ChatApp.template.getHtml('errorMessage', data);
 		}
 
-		if(html !== null)
+		if(html !== null){
 			messageContainer.innerHTML = messageContainer.innerHTML + html;
-		messageContainer.scrollTop = messageContainer.clientHeight;
+			messageContainer.scrollTop = messageContainer.clientHeight;
+		}
 	};
 
+	Chat.connect('127.0.0.1', '8888');
+
 	document.getElementById('singin-btn').addEventListener("click", function(){
-		ChatClient.singInUser(document.getElementById('username').value);
+		Chat.singInUser(userName.value);
 	});
 
 	sendBtn.addEventListener("click", function(){
-		ChatClient.sendMessage(fieldMessage.value);
+		Chat.sendMessage(fieldMessage.value);
 		fieldMessage.value = '';
 	});
 };
