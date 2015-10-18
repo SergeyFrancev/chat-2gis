@@ -5,6 +5,7 @@ window.onload = function(){
 		fieldMessage = document.getElementById('input'),
 		sendBtn = document.getElementById('send'),
 		userName = document.getElementById('username'),
+		singInBtn = document.getElementById('singin-btn'),
 		isAuth = false;
 
 	var Chat = new ChatApp.chatClient();
@@ -34,20 +35,24 @@ window.onload = function(){
 			userContainer.innerHTML = userContainer.innerHTML + ChatApp.template.getHtml('user', userList[i]);
 	});
 
-	Chat.on('errorLogin', function(error){
-		showErrorLogin(error.message);
-	});
+	//Chat.on('errorLogin', function(error){
+	//	showErrorLogin(error.message);
+	//});
 
 	//Call after socket close connection
-	Chat.on('errorConnection', function(error){
+	Chat.on('error', function(error){
 		if(isAuth)
-		{
 			renderMessage(error);
-			fieldMessage.disabled = true;
-			sendBtn.disabled = true;
-		}
 		else
 			showErrorLogin(error.message);
+
+		if(error.type == 'connection')
+		{
+			fieldMessage.disabled = true;
+			sendBtn.disabled = true;
+			singInBtn.disabled = true;
+			userName.disabled = true;
+		}
 	});
 
 	var showErrorLogin = function(errorMessage){
@@ -79,7 +84,7 @@ window.onload = function(){
 
 	Chat.connect('127.0.0.1', '8888');
 
-	document.getElementById('singin-btn').addEventListener("click", function(){
+	singInBtn.addEventListener("click", function(){
 		Chat.singInUser(userName.value);
 	});
 

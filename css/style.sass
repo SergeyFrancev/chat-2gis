@@ -1,0 +1,16 @@
+@mixin chat-container($height)
+  height: $height
+  overflow: auto
+
+#messages-container
+  @include chat-container(300px)
+  font: 11pt 'Palatino Linotype'
+
+#user-container
+  @include chat-container(300px)
+
+.container
+  margin-top: 50px
+
+.test
+  margin: 20px

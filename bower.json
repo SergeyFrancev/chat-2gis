@@ -1,11 +1,11 @@
 {
   "name": "chat-2gis",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "homepage": "https://github.com/SergeyFrancev/chat-2gis",
   "authors": [
     "hector <drshteyn@gmail.vom>"
   ],
-  "description": "Test task for 2Gis",
+  "description": "Sample one-page chat",
   "main": "index.html",
   "moduleType": [],
   "license": "MIT",

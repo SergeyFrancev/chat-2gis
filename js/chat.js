@@ -63,7 +63,7 @@ var ChatApp = ChatApp || {};
 			this.fire('startChat', {messages: data.messages});
 			break;
 		case 'error-login':
-			this.fire('errorLogin', {message: data.error});
+			this.fire('error', {message: data.error, type: 'auth'});
 			break;
 		case 'new-message':
 			this.fire('newMessage', data.message);
@@ -76,11 +76,11 @@ var ChatApp = ChatApp || {};
 	ChatClient.prototype.onOpenWS = function(){};
 	ChatClient.prototype.onCloseWS = function(){
 		this._socket = false;
-		this.fire('errorConnection', {message: 'Server close socket'});
+		this.fire('error', {message: 'Server close socket', type: 'connection'});
 	};
 	ChatClient.prototype.onErrorWS = function(){
 		this._socket = false;
-		this.fire('errorConnection', {message: 'Server error'});
+		this.fire('error', {message: 'Server error', type: 'connection'});
 	};
 
 	Object.defineProperty(ChatClient.prototype, 'port', {
