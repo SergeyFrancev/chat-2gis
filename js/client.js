@@ -22,7 +22,7 @@ window.onload = function(){
 		while(messageList.length > 0)
 			renderMessage(messageList.shift());
 
-		//Hide error login message
+		//Clear login form
 		showErrorLogin(false);
 		userName.value = '';
 	});
@@ -34,10 +34,6 @@ window.onload = function(){
 		for(var i = 0; i < userList.length; i++)
 			userContainer.innerHTML = userContainer.innerHTML + ChatApp.template.getHtml('user', userList[i]);
 	});
-
-	//Chat.on('errorLogin', function(error){
-	//	showErrorLogin(error.message);
-	//});
 
 	//Call after socket close connection
 	Chat.on('error', function(error){
@@ -55,6 +51,7 @@ window.onload = function(){
 		}
 	});
 
+	//Show error on login form
 	var showErrorLogin = function(errorMessage){
 		var errCont = document.getElementById('error-container');
 		if(errorMessage)

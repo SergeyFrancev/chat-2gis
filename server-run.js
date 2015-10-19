@@ -6,7 +6,7 @@ var staticServer = require('node-static');
 var fileServer = new staticServer.Server('.');
 var WebSocketServer = require('ws');
 
-var chat = require('./chat');
+var Chat = require('./chat');
 
 //Server static files
 http.createServer(function(req, res){
@@ -16,5 +16,5 @@ http.createServer(function(req, res){
 //Web socket server
 var webSocketServer = new WebSocketServer.Server({port: 8888});
 webSocketServer.on('connection', function(ws){
-	chat.connectUser(ws);
+	Chat.connectUser(ws);
 });
