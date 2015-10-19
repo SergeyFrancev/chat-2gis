@@ -4,7 +4,9 @@
   "description": "Test task for 2GIS. For the post JS-Developer",
   "main": "server-run.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "node_modules/bower/bin/bower install",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",

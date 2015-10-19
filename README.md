@@ -1,8 +1,12 @@
 #Chat 2Gis
-*Простой чат*
-*-Node.js server*
-*-WebSocket*
-*-Mocha test*
+*Простой чат
+-Node.js server
+-WebSocket
+-Mocha test
+
+Сообщения храняться в памяти node.js после перезапуска сервера очищаются.
+Одна комната чата для всех пользователей.
+При входе в чат загружает все прошлые сообщения.
 
 ## Requirements
 	- node -v v0.12.7
@@ -12,8 +16,7 @@
 ## Install
 	```
     $ npm install
-    $ node_modules/bower/bin/bower install
-    $ gulp build
+    $ npm build
     ```
 
 ## Run
